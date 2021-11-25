@@ -1,5 +1,5 @@
-﻿//Author:绫雪 时间:2021/11/20 邮箱:2239301685@qq.com/yaolin6666@gmail.com 
-//操作系统实验作业:资源分配算法
+﻿//Author:绫雪 时间:2021/11/25 邮箱:2239301685@qq.com/yaolin6666@gmail.com 
+//操作系统实验作业:资源分配算法(五进程3资源)
 //银行家算法 安全性算法实现
 #include <iostream>
 #include<cstring>
@@ -10,14 +10,10 @@ public:char name[5];
       int A;
       int B;
       int C;
-      int D;
-      int E;
       bool flag1;
       bool flag2;
       Resources(void);
       Resources(char n[5], int a, int b, int c);
-      Resources(char n[5], int a, int b, int c, int d);
-      Resources(char n[5], int a, int b, int c, int d, int e);
       Resources operator+(const Resources& b)
       {
           Resources temp;
@@ -25,8 +21,6 @@ public:char name[5];
           temp.A = this->A + b.A;
           temp.B = this->B + b.B;
           temp.C = this->C + b.C;
-          temp.D = this->D + b.D;
-          temp.E = this->E + b.E;
           return temp;
       };
       Resources operator-(const Resources& b)
@@ -36,8 +30,6 @@ public:char name[5];
           temp.A = this->A - b.A;
           temp.B = this->B - b.B;
           temp.C = this->C - b.C;
-          temp.D = this->D - b.D;
-          temp.E = this->E - b.E;
           return temp;
       };
       bool operator<(const Resources& b)                                                    
@@ -54,7 +46,7 @@ public:char name[5];
 Resources::Resources(void)
 {
     strcpy_s(name, "NULL");
-    A = 0, B = 0, C = 0,D=0,E=0;
+    A = 0, B = 0, C = 0;
     flag1 = false, flag2 = false;
 }
 
@@ -62,25 +54,12 @@ Resources::Resources(char n[5], int a, int b, int c)
 {
     strcpy_s(name, n);
     A = a, B = b, C = c;
-    D = 0, E = 0;
     flag1 = false, flag2 = false;
 }
 
-Resources::Resources(char n[5], int a, int b, int c,int d)
-{
-    strcpy_s(name, n);
-    A = a, B = b, C = c,D=d;
-    E = 0;
-    flag1 = false, flag2 = false;
-}
-
-Resources::Resources(char n[5], int a, int b, int c,int d,int e)
-{
-    strcpy_s(name, n);
-    A = a, B = b, C = c,D=d,E=e;
-    flag1 = false, flag2 = false;
-}
 using namespace std;
+
+
 int main()
 {
     int MenuN=0;
