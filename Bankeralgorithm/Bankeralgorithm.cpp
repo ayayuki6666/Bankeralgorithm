@@ -1,4 +1,4 @@
-﻿//Author:绫雪 时间:2021/11/25 邮箱:2239301685@qq.com/yaolin6666@gmail.com 
+﻿//Author:绫雪 时间:2021/11/26 邮箱:2239301685@qq.com/yaolin6666@gmail.com 
 //操作系统实验作业:资源分配算法(五进程3资源)
 //银行家算法 安全性算法实现
 #include <iostream>
@@ -68,43 +68,62 @@ void Resources::set(int a, int b, int c)
 }
 using namespace std;
 
-void securityCheckA(Resources avi, Resources PT[5], Resources A[5],Resources N[5],Resources Req)           
+void securityCheck(Resources avi, Resources PT[5], Resources A[5],Resources N[5],Resources Req)           
 {
-    int cursor=-1,flag=0,Temp[5] = {0,0,0,0,0};
+    int flag=0,Temp[5] = {0,0,0,0,0},count=0,j=1;
+    Resources workCout[6];
     Resources work;
     work = avi;
-    for (int i = 0; i < 5; i++)
+    workCout[0] = work;
+    while (true)
     {
-        PT[i].flag2 = false;                                                                 //安全性算法状态更新
-        if (strcmp(A[i].name, Req.name) == 0)
+        count = 0;
+        //cout << count << endl;
+        for (int i = 0; i < 5; (i++)%5)                         //安全型算法执行
         {
-            cursor = i;
+            
+            //cout << count << endl;
+            if (N[i].A <= work.A && N[i].B <= work.B && N[i].C <= work.C && N[i].flag2 == false)
+            {
+                work = work + A[i];
+                workCout[j] = work;
+                j++;
+                PT[i].flag2 = true,N[i].flag2=true;
+                Temp[flag] = i;
+                flag++;
+                break;
+            }
+            count++;                                        //计数在未发现符合条件且为满足安全条件时退出
+            
+            if (count > 10)
+            {
+                cout << count << endl;
+                break;
+            }
+            if (flag == 5)
+                break;
         }
+        cout << count+1 << endl;
+        if (count > 10)
+        {
+            cout <<"System Insecurity"<<endl << Req.name << " can't get resources immediately" << endl;
+            break;
+        }
+        if (flag == 5)
+            break;
     }
-        if (avi.A < Req.A && avi.B < Req.B && avi.C < avi.C)
-            cout << "资源总量不足" << endl;
-        else if (N[cursor].A < Req.A && N[cursor].B < Req.B && N[cursor].C < Req.C)
-            cout << "请求总量大于剩余所需" << endl;
-        else
-        {
-            avi = avi - Req, N[cursor] = N[cursor] - Req, A[cursor] = A[cursor] + Req;
-            PT[cursor].flag2 = true;
-            Temp[0] = cursor;
-        }
-
 }
-
-
-
 
 int main()
 {
-    int size = 5;                                                                           //用于完善程序通用性
+    int size = 5,cursor=-1;                                                                           //用于完善程序通用性
     int MenuN=0;
+    bool flag = false;
     char AviName[20] = "availabe";
     Resources availabe(AviName, 3, 3, 2);
     char Np[5][20] = { "p0", "p1", "p2", "p3", "p4" };
     Resources P[5],Allocation[5],Need[5];
+    Resources Reqtest(Np[4], 3, 3, 0);
     for (int i = 0; i < size; i++)
     {
         Resources Temp(Np[i]);
@@ -119,7 +138,37 @@ int main()
         {
             Need[i] = P[i] - Allocation[i];
         }
-    }                                                                                       //资源初始化
+
+        for (int i = 0; i < 5; i++)
+        {
+            if (strcmp(P[i].name, Reqtest.name) == 0)
+            {
+                cursor = i;
+                flag = true;
+                break;
+            }
+        }
+        if (flag)
+        {
+            if (availabe.A < Reqtest.A && availabe.B < Reqtest.B && availabe.C < Reqtest.C)
+                cout << "资源总量不足" << endl;
+            else if (Need[cursor].A < Reqtest.A && Need[cursor].B < Reqtest.B && Need[cursor].C < Reqtest.C)
+                cout << "请求总量大于剩余所需" << endl;
+            else
+            {
+                availabe = availabe - Reqtest, Need[cursor] = Need[cursor] - Reqtest, Allocation[cursor] = Allocation[cursor] + Reqtest;
+            }
+        }
+        else
+        {
+            cout << "Progress " << Reqtest.name << " Not found" << endl;
+            exit(0); 
+        }
+    }                                                                                      //资源初始化
+    /*for (int i = 0; i < 5; i++)
+        cout << Need[i].A << Need[i].B << Need[i].C << endl;*/
+    securityCheck(availabe, P, Allocation, Need, Reqtest);
+                                                                                       
     /*while (true)
     {
         cout << "1:judge the system security" << endl << "2:judge the request security" << endl << "3:exit" << endl;
