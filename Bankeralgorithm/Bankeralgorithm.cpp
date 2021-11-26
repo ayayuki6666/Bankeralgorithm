@@ -5,6 +5,7 @@
 #include<cstring>
 #include<algorithm>
 #include<windows.h>
+using namespace std;
 class Resources {
 public:char name[20];
       int A;
@@ -66,7 +67,7 @@ void Resources::set(int a, int b, int c)
 {
     A = a, B = b, C = c;
 }
-using namespace std;
+
 
 void securityCheck(Resources avi, Resources PT[5], Resources A[5],Resources N[5],Resources Req)           
 {
@@ -75,14 +76,12 @@ void securityCheck(Resources avi, Resources PT[5], Resources A[5],Resources N[5]
     Resources work;
     work = avi;
     workCout[0] = work;
-    while (true)
+    int i = 0;                              //i=0位置影响最终顺序
+    while(true)
     {
         count = 0;
-        //cout << count << endl;
-        for (int i = 0; i < 5; (i++)%5)                         //安全型算法执行
+        for (;;)                         //安全型算法执行
         {
-            
-            //cout << count << endl;
             if (N[i].A <= work.A && N[i].B <= work.B && N[i].C <= work.C && N[i].flag2 == false)
             {
                 work = work + A[i];
@@ -93,24 +92,38 @@ void securityCheck(Resources avi, Resources PT[5], Resources A[5],Resources N[5]
                 flag++;
                 break;
             }
-            count++;                                        //计数在未发现符合条件且为满足安全条件时退出
-            
-            if (count > 10)
-            {
-                cout << count << endl;
-                break;
-            }
+            count++;
             if (flag == 5)
                 break;
+            if (count > 10)
+                break;
+            i = (i+1) % 5;
         }
-        cout << count+1 << endl;
         if (count > 10)
         {
-            cout <<"System Insecurity"<<endl << Req.name << " can't get resources immediately" << endl;
+            cout << "SYSTEM INSECURITY" << endl;
+            if(strcmp(Req.name,"NULL")!=0)
+                cout << Req.name << " CAN'T GET RESOURCES IMMEDIATELY" << endl;
             break;
         }
         if (flag == 5)
+        {
+                cout << "Name\t\tWork\t\tNeed\t\tAllocation\t\tWork+Allocation\t\tFinish" << endl;
+                for(int i=0;i<5;i++)
+                {
+                    cout << PT[Temp[i]].name << "\t\t" << workCout[i].A << "  " << workCout[i].B << "  " << workCout[i].C << "  ";
+                    cout << "\t" << N[Temp[i]].A << "  " << N[Temp[i]].B << "  " << N[Temp[i]].C << "  ";
+                    cout << "\t" << A[Temp[i]].A << "  " << A[Temp[i]].B << "  " << A[Temp[i]].C << "  ";
+                    cout << "\t\t" << workCout[i+1].A << "  " << workCout[i+1].B << "  " << workCout[i+1].C << "  ";
+                    if (PT[Temp[i]].flag2)
+                        cout << "\t\tT" << endl;
+                    else
+                        cout << "\t\tF" << endl;
+                    
+                }
+                cout << "SYSTEM SECURITY!!!!"<<endl;
             break;
+        }
     }
 }
 
@@ -120,10 +133,25 @@ int main()
     int MenuN=0;
     bool flag = false;
     char AviName[20] = "availabe";
-    Resources availabe(AviName, 3, 3, 2);
+    char Te[5] = "NULL";
+    char T[20],Tbeta[20];
+    int Tn[6];
+    Resources P[5],Allocation[5],Need[5],Reqtest,availabe(AviName);
+    cout << "Input the amount of resource (maximum,allocated) of each customer" << endl;
+    for (int i = 0; i < 5; i++)
+    {
+        cin >> T >> Tn[0] >> Tn[1] >> Tn[2] >> Tn[3] >> Tn[4] >> Tn[5];
+        Resources A(T, Tn[0], Tn[1], Tn[2]);
+        Resources B(T, Tn[3], Tn[4], Tn[5]);
+        P[i] = A,Allocation[i]=B,Need[i]=A-B;
+    }
+    cout << "Input the amount of resources(available)" << endl;
+    cin >> Tn[0] >> Tn[1] >> Tn[2];
+    availabe.set(Tn[0], Tn[1], Tn[2]);
+    /*Resources availabe(AviName, 3, 3, 2);
     char Np[5][20] = { "p0", "p1", "p2", "p3", "p4" };
-    Resources P[5],Allocation[5],Need[5];
-    Resources Reqtest(Np[4], 3, 3, 0);
+    Resources T(Np[1], 1, 0, 2);
+    Reqtest = T;
     for (int i = 0; i < size; i++)
     {
         Resources Temp(Np[i]);
@@ -134,52 +162,56 @@ int main()
     {
         P[0].set(7, 5, 3), P[1].set(3, 2, 2), P[2].set(9, 0, 2), P[3].set(2, 2, 2), P[4].set(4, 3, 3);
         Allocation[0].set(0, 1, 0), Allocation[1].set(2, 0, 0), Allocation[2].set(3, 0, 2), Allocation[3].set(2, 1, 1), Allocation[4].set(0, 0, 2);
-        for (int i = 0; i < size; i++)
-        {
-            Need[i] = P[i] - Allocation[i];
-        }
+        
 
-        for (int i = 0; i < 5; i++)
-        {
-            if (strcmp(P[i].name, Reqtest.name) == 0)
-            {
-                cursor = i;
-                flag = true;
-                break;
-            }
-        }
-        if (flag)
-        {
-            if (availabe.A < Reqtest.A && availabe.B < Reqtest.B && availabe.C < Reqtest.C)
-                cout << "资源总量不足" << endl;
-            else if (Need[cursor].A < Reqtest.A && Need[cursor].B < Reqtest.B && Need[cursor].C < Reqtest.C)
-                cout << "请求总量大于剩余所需" << endl;
-            else
-            {
-                availabe = availabe - Reqtest, Need[cursor] = Need[cursor] - Reqtest, Allocation[cursor] = Allocation[cursor] + Reqtest;
-            }
-        }
-        else
-        {
-            cout << "Progress " << Reqtest.name << " Not found" << endl;
-            exit(0); 
-        }
     }                                                                                      //资源初始化
-    /*for (int i = 0; i < 5; i++)
-        cout << Need[i].A << Need[i].B << Need[i].C << endl;*/
-    securityCheck(availabe, P, Allocation, Need, Reqtest);
-                                                                                       
-    /*while (true)
+        
+    */
+    while (true)
     {
         cout << "1:judge the system security" << endl << "2:judge the request security" << endl << "3:exit" << endl;
         cin >> MenuN;
         if (MenuN == 1)
         {
-            //do sth
+            Resources Temp(Te);
+            Reqtest = Temp;
+            securityCheck(availabe, P, Allocation, Need, Reqtest);
+            break;
         }
         else if (MenuN == 2)
         {
-            //do sth;
+            cout << "Please input the customer's name and request"<<endl;
+            cin >> Tbeta >> Tn[0] >> Tn[1] >> Tn[2];
+            Resources Temp(Tbeta);
+            Reqtest = Temp;
+            Reqtest.set(Tn[0], Tn[1], Tn[2]);
+            for (int i = 0; i < 5; i++)
+            {
+                if (strcmp(P[i].name, Reqtest.name) == 0)
+                {
+                    cursor = i;
+                    flag = true;
+                    break;
+                }
+            }
+            if (flag)
+            {
+                if (availabe.A < Reqtest.A && availabe.B < Reqtest.B && availabe.C < Reqtest.C)
+                    cout << "INSUFFICIENT AVAILABLE RESOURCES" << endl;
+                else if (Need[cursor].A < Reqtest.A && Need[cursor].B < Reqtest.B && Need[cursor].C < Reqtest.C)
+                    cout << "请求总量大于剩余所需" << endl;
+                else
+                {
+                    availabe = availabe - Reqtest, Need[cursor] = Need[cursor] - Reqtest, Allocation[cursor] = Allocation[cursor] + Reqtest;
+                }
+            }
+            else
+            {
+                cout << "Progress " << Reqtest.name << " Not found" << endl;
+                exit(0);
+            }
+            securityCheck(availabe, P, Allocation, Need, Reqtest);
+            break;
         }
         else if (MenuN == 3)
         {
@@ -187,6 +219,5 @@ int main()
         }
         else
             cout << "input error" << endl;
-    }*/
-    cout << "Hello World!\n";
+    }
 }
