@@ -67,8 +67,6 @@ void Resources::set(int a, int b, int c)
 {
     A = a, B = b, C = c;
 }
-
-
 void securityCheck(Resources avi, Resources PT[5], Resources A[5],Resources N[5],Resources Req)           
 {
     int flag=0,Temp[5] = {0,0,0,0,0},count=0,j=1;
@@ -126,7 +124,6 @@ void securityCheck(Resources avi, Resources PT[5], Resources A[5],Resources N[5]
         }
     }
 }
-
 int main()
 {
     int size = 5,cursor=-1;                                                                           //用于完善程序通用性
@@ -148,25 +145,6 @@ int main()
     cout << "Input the amount of resources(available)" << endl;
     cin >> Tn[0] >> Tn[1] >> Tn[2];
     availabe.set(Tn[0], Tn[1], Tn[2]);
-    /*Resources availabe(AviName, 3, 3, 2);
-    char Np[5][20] = { "p0", "p1", "p2", "p3", "p4" };
-    Resources T(Np[1], 1, 0, 2);
-    Reqtest = T;
-    for (int i = 0; i < size; i++)
-    {
-        Resources Temp(Np[i]);
-        P[i] = Temp;
-        Allocation[i] = Temp;
-        Need[i] = Temp;
-    }
-    {
-        P[0].set(7, 5, 3), P[1].set(3, 2, 2), P[2].set(9, 0, 2), P[3].set(2, 2, 2), P[4].set(4, 3, 3);
-        Allocation[0].set(0, 1, 0), Allocation[1].set(2, 0, 0), Allocation[2].set(3, 0, 2), Allocation[3].set(2, 1, 1), Allocation[4].set(0, 0, 2);
-        
-
-    }                                                                                      //资源初始化
-        
-    */
     while (true)
     {
         cout << "1:judge the system security" << endl << "2:judge the request security" << endl << "3:exit" << endl;
