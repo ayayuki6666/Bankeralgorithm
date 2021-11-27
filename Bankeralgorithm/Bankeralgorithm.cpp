@@ -1,4 +1,4 @@
-﻿//Author:绫雪 时间:2021/11/26 邮箱:2239301685@qq.com/yaolin6666@gmail.com 
+﻿//Author:绫雪 时间:2021/11/27 邮箱:2239301685@qq.com/yaolin6666@gmail.com 
 //操作系统实验作业:资源分配算法(五进程3资源)
 //银行家算法 安全性算法实现
 #include <iostream>
