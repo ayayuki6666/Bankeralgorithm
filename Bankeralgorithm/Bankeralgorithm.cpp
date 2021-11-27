@@ -35,14 +35,14 @@ public:char name[20];
           temp.C = this->C - b.C;
           return temp;
       };
-      bool operator<(const Resources& b)                                                    
+      bool operator<(const Resources& b)
       {
           if (this->A < b.A && this->B < b.B && this->C < b.C)
               return true;
           else
               return false;
-      };                                           
-                                                                                            //'<'有需求时进行重载(有需求使用)
+      };
+      //'<'有需求时进行重载(有需求使用)
 };                                                                                          //对于资源使用类 而非数组表示 同时重载各类所需运算符
 Resources::Resources(void)
 {
@@ -69,13 +69,13 @@ void Resources::set(int a, int b, int c)
 }
 void securityCheck(Resources avi, Resources PT[5], Resources A[5],Resources N[5],Resources Req,int size)           
 {
-    int flag=0,Temp[5] = {0,0,0,0,0},count=0,j=1;
+    int flag = 0, Temp[5] = { 0,0,0,0,0 }, count = 0, j = 1;
     Resources workCout[6];
     Resources work;
     work = avi;
     workCout[0] = work;
     int i = 0;                              //i=0位置影响最终顺序
-    while(true)
+    while (true)
     {
         count = 0;
         for (;;)                         //安全型算法执行
@@ -85,7 +85,7 @@ void securityCheck(Resources avi, Resources PT[5], Resources A[5],Resources N[5]
                 work = work + A[i];
                 workCout[j] = work;
                 j++;
-                PT[i].flag2 = true,N[i].flag2=true;
+                PT[i].flag2 = true, N[i].flag2 = true;
                 Temp[flag] = i;
                 flag++;
                 break;
@@ -100,7 +100,7 @@ void securityCheck(Resources avi, Resources PT[5], Resources A[5],Resources N[5]
         if (count > (size*2))
         {
             cout << "SYSTEM INSECURITY" << endl;
-            if(strcmp(Req.name,"NULL")!=0)
+            if (strcmp(Req.name, "NULL") != 0)
                 cout << Req.name << " CAN'T GET RESOURCES IMMEDIATELY" << endl;
             break;
         }
@@ -131,7 +131,7 @@ int main()
     bool flag = false,flag1=false;
     char AviName[20] = "availabe";
     char Te[5] = "NULL";
-    char T[20],Tbeta[20];
+    char T[20], Tbeta[20];
     int Tn[6];
     cout << "Input the type of the resources and number of customer"<<endl;
     cin >> ddd >>  size;                                                                                 //没什么作用 形式主义 使之和要求相同
@@ -142,7 +142,7 @@ int main()
         cin >> T >> Tn[0] >> Tn[1] >> Tn[2] >> Tn[3] >> Tn[4] >> Tn[5];
         Resources A(T, Tn[0], Tn[1], Tn[2]);
         Resources B(T, Tn[3], Tn[4], Tn[5]);
-        P[i] = A,Allocation[i]=B,Need[i]=A-B;
+        P[i] = A, Allocation[i] = B, Need[i] = A - B;
     }
     Resources Pt[5], At[5], Nt[5],Avt;    
     cout << "Input the amount of resources(available)" << endl;
